@@ -1,0 +1,16 @@
+### GET Request
+GET http://localhost:8383
+
+### POST Request
+POST http://localhost:8383/api/data
+Content-Type: application/json
+
+{
+    "name": "victory",
+    "gender": "male"
+}
+
+### POST 2 request
+
+POST http://localhost:8383/api/data-v2
+Content-Type: application/json

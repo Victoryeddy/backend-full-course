@@ -1,0 +1,45 @@
+### GET /
+GET http://localhost:8383/
+
+### 
+POST http://localhost:8383/auth/register
+Content-Type: application/json
+
+{
+    "username": "dinesh@gmail.com",
+    "password": "123456"
+}
+
+###
+POST http://localhost:8383/auth/login
+Content-Type: application/json
+
+{
+    "username": "dinesh@gmail.com",
+    "password": "123456"
+}
+
+###
+GET http://localhost:8383/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYzMDQ1MjcyLCJleHAiOjE3NjMxMzE2NzJ9.5UNjNYevq02c9iK_VHDAxb2RbWCnrM5ZyZuRUgVvK0g
+
+###
+POST http://localhost:8383/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYzMDQ1MjcyLCJleHAiOjE3NjMxMzE2NzJ9.5UNjNYevq02c9iK_VHDAxb2RbWCnrM5ZyZuRUgVvK0g
+Content-Type: application/json
+
+{
+  "task": "hello world again, i say hello" 
+}
+
+###
+PUT http://localhost:8383/todos/1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYzMDQ1MjcyLCJleHAiOjE3NjMxMzE2NzJ9.5UNjNYevq02c9iK_VHDAxb2RbWCnrM5ZyZuRUgVvK0g
+Content-Type: application/json
+
+{
+  "completed": 1
+}
+###
+DELETE  http://localhost:8383/todos/1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYzMDQ1MjcyLCJleHAiOjE3NjMxMzE2NzJ9.5UNjNYevq02c9iK_VHDAxb2RbWCnrM5ZyZuRUgVvK0g
