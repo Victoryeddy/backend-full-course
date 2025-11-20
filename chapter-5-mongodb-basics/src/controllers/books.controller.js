@@ -1,5 +1,6 @@
 import { Book } from "../models/book.js";
 import { handleError } from "../utils/error.js";
+import { paginate } from "../utils/paginate.js";
 
 const createABook = async (req, res) => {
   try {
@@ -19,13 +20,13 @@ const createABook = async (req, res) => {
 
 const getAllBooks = async (req, res) => {
   try {
-    const allBooks = await Book.find({}).sort({ updatedAt: -1 });
-    if (allBooks?.length > 0) {
-      res.status(200).json({
-        success: true,
-        message: "Books Retrieved Successfully",
-        data: allBooks,
-      });
+    const result = await paginate(Book, req, {
+      searchFields: ["name", "description"],
+      defaultSort: { createdAt: -1 },
+    }, 'Books');
+
+    if (result?.data?.length > 0) {
+      res.json(result);
     } else {
       res.status(404).json({
         success: false,

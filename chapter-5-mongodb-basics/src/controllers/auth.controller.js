@@ -1,4 +1,4 @@
-import { User } from "../models/user";
+import { User } from "../models/user.js";
 import { handleError } from "../utils/error.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -7,9 +7,16 @@ const handleRegister = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
+      const missingFields = [];
+      if (!username) missingFields.push("Username");
+      if (!email) missingFields.push("Email");
+      if (!password) missingFields.push("Password");
+
       return res.status(400).json({
         success: false,
-        message: "Username, email, and password are required",
+        message: `${missingFields.join(", ")} ${
+          missingFields.length === 1 ? "is" : "are"
+        } required`,
       });
     }
 
@@ -60,9 +67,53 @@ const handleRegister = async (req, res) => {
   }
 };
 
+// login a user
 const handleLogin = async (req, res) => {
   try {
-  } catch (error) {}
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      const missingFields = [];
+      if (!email) missingFields.push('Email');
+      if (!password) missingFields.push('Password');
+      
+      return res.status(400).json({
+        success: false,
+        message: `${missingFields.join(', ')} ${missingFields.length === 1 ? 'is' : 'are'} required`,
+      });
+    }
+
+    const user = await User.findOne({ email }).select('+password');
+
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    const token = jwt.sign(
+      { id: user._id }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: "24h" }
+    );
+
+    const userResponse = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+    };
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token: token,
+      data: userResponse
+    });
+
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export const AUTH = {
